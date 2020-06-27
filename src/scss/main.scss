@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background: #f6f7f8;
+    overflow-x: hidden;
+}
+
+img{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item{
+    position: relative;
+    width: 20%;
+    cursor: move;
+    object-fit: cover;
+}

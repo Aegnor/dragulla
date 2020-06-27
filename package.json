@@ -1,0 +1,24 @@
+{
+  "name": "drag'n'drop",
+  "version": "1.0.0",
+  "description": "drag'n'drop items portfolio",
+  "private": true,
+  "scripts": {
+    "start": "parcel ./src/*.html",
+    "watch": "parcel watch ./src/*.html",
+    "open": "parcel serve ./src/*.html",
+    "build": "parcel build ./src/*.html"
+  },
+  "keywords": [],
+  "author": "SBRSV <12alexman@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "gsap": "^3.3.1",
+    "img": "^3.0.3",
+    "normalize.css": "^8.0.1",
+    "parcel-bundler": "^1.12.4"
+  },
+  "devDependencies": {
+    "sass": "^1.26.8"
+  }
+}
