@@ -25,6 +25,7 @@ class Drag {
     onDragStart( event ){
         this.dragState = true
         event.preventDefault()
+        event.target
 
         const 
             x = getMousePosition(event).x,
