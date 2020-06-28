@@ -17,12 +17,13 @@ img{
 .container{
     position: relative;
     display: flex;
+    margin-top: 140px;
     flex-wrap: wrap;
+    flex-direction: column
 }
 
 .item{
     position: relative;
-    width: 20%;
-    cursor: move;
+    width: 33%;
     object-fit: cover;
 }

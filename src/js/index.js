@@ -3,94 +3,107 @@ import './assets/case'
 import gsap from "gsap"
 import getMousePosition from "./utils/dom"
 
-class Drag {
-    constructor(elements){
-        this.element = document.querySelectorAll(elements);
 
-        this.dragState = false
-        
-        this.drag = {
-            startX: 0,
-            startY: 0,
-            endX: 0,
-            endY: 0,
-            x: 0,
-            y: 0
-        }
+// мы могли это сделать и через класс
+let elements = document.querySelectorAll('.item');
 
-        this.addEventListeners()
+let dragState = false
 
+let position = { x: 0, y: 0 };
+let startPoint = { x: 0, y: 0 };
+let dragPoint = { x: 0, y: 0 };
+
+let 
+    target,
+    zIndex = 0,
+    lastPosX = 0,
+    lastPosY = 0,
+    distanceX = 0,
+    distanceY = 0;
+
+function getPositionCoord( styleSide, measure ) {
+    if ( styleSide.indexOf('%') != -1 ) {
+      // convert percent into pixel for Safari, #75
+      var parentSize = getSize( this.element.parentNode );
+      // prevent not-in-DOM element throwing bug, #131
+      return !parentSize ? 0 :
+        ( parseFloat( styleSide ) / 100 ) * parentSize[ measure ];
     }
+    return parseInt( styleSide, 10 );
+};
 
-    onDragStart( event ){
-        this.dragState = true
-        event.preventDefault()
-        event.target
+function getStylePosition( element ){
+    var style = getComputedStyle(element);
+    var x = getPositionCoord( style.left, 'width' );
+    var y = getPositionCoord( style.top, 'height' );
+    // clean up 'auto' or other non-integer values
+    position.x = isNaN( x ) ? 0 : x;
+    position.y = isNaN( y ) ? 0 : y;
+}
 
-        const 
-            x = getMousePosition(event).x,
-            y = getMousePosition(event).y
+function onDragStart( event ){
+    if( event.button !== 0) return
 
-        this.drag.startX = x
-        this.drag.startY = y
+    dragState = true
 
+    event.preventDefault()
+ 
+    target = event.target;
 
+    getStylePosition(target);
 
-        gsap.set(event.target, {
-            zIndex: 43
-        })
-    }
+    zIndex++
 
-    onDragMove( event ){
-        if( !this.dragState ) return
-        
-        const elements = this.element
+    startPoint.x = getMousePosition(event).x;
+    startPoint.y = getMousePosition(event).y;
 
+    lastPosX = position.x
+    lastPosY = position.y
 
-        elements.forEach(element => {
-          console.log(this)
-        })
+    gsap.set(target, {
+        zIndex: 103,
+    })
+}
 
-        let 
-            x = getMousePosition(event).x,
-            y = getMousePosition(event).y
+function onDragMove( event ){
+    if ( !dragState ) return
 
-        this.distanceX = this.drag.startX - x
-        this.distanceY = this.drag.startY - y
+    dragPoint.x = getMousePosition(event).x;
+    dragPoint.y = getMousePosition(event).y;
+    
+    distanceX = startPoint.x - dragPoint.x,
+    distanceY = startPoint.y - dragPoint.y;
 
-        this.drag.y = this.drag.endY + this.distanceY
-        this.drag.x = this.drag.endX + this.distanceX
+    console.log(distanceX, distanceY)
 
-        gsap.set(event.target, {
-            x: -this.drag.x,
-            y: -this.drag.y,
-        })
-    }
+    console.log(distanceX !== 0, distanceY !== 0)
 
-    onDragEnd(event){
-        this.dragState = false
-        this.drag.endX = this.drag.x
-        this.drag.endY = this.drag.y
+    lastPosX = -distanceX + position.x;
+    lastPosY = -distanceY + position.y;
+    
 
-        let dragX = this.drag.x,
-        dragY = this.drag.y;
-        console.log(dragY, dragX)
-        console.log(event)
-    }
+    gsap.set(target, {
+       x: -distanceX,
+       y: -distanceY
+    })
 
-    addEventListeners() {
-        const elements = this.element
+}
 
+function onDragEnd( event ){
+    dragState = false
 
-        elements.forEach(element => {
-            element.addEventListener('mousedown', this.onDragStart.bind(this))
-            element.addEventListener('mousemove', this.onDragMove.bind(this))
-            element.addEventListener('mouseup', this.onDragEnd.bind(this))
-        })
-        document.addEventListener('mouseup', this.onDragEnd.bind(this))
+    gsap.set(target, {
+        zIndex: 1 + zIndex,
+        x: 0,
+        y: 0,
+        left: lastPosX,
+        top: lastPosY
+    })
 
-    }
+}
 
-}   
-
-const drag = new Drag('.item')
+elements.forEach(element => {
+    element.addEventListener('mousedown', onDragStart)
+})
+document.addEventListener('mousemove', onDragMove)
+document.addEventListener('mouseup', onDragEnd)
