@@ -1,17 +1,18 @@
 {
   "name": "drag'n'drop",
   "version": "1.0.0",
-  "description": "drag'n'drop items portfolio",
+  "description": "Super simple draggable gesture",
   "private": true,
   "scripts": {
-    "start": "parcel ./src/*.html",
-    "watch": "parcel watch ./src/*.html",
-    "open": "parcel serve ./src/*.html",
-    "build": "parcel build ./src/*.html"
+    "start": "parcel drag-n-drop/src/*.html",
+    "watch": "parcel watch drag-n-drop/src/*.html",
+    "open": "parcel serve drag-n-drop/src/*.html",
+    "build": "parcel build drag-n-drop/src/*.html"
   },
-  "keywords": [],
+  "keywords": ["drag, draggable"],
   "author": "SBRSV <12alexman@gmail.com>",
   "license": "ISC",
+  "repository": "https://github.com/SBRSV/dragulla",
   "dependencies": {
     "gsap": "^3.3.1",
     "img": "^3.0.3",
