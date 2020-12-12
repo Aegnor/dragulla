@@ -9,7 +9,9 @@
     "open": "parcel serve drag-n-drop/src/*.html",
     "build": "parcel build drag-n-drop/src/*.html"
   },
-  "keywords": ["drag, draggable"],
+  "keywords": [
+    "drag, draggable"
+  ],
   "author": "SBRSV <12alexman@gmail.com>",
   "license": "ISC",
   "repository": "https://github.com/SBRSV/dragulla",
@@ -17,7 +19,7 @@
     "gsap": "^3.3.1",
     "img": "^3.0.3",
     "normalize.css": "^8.0.1",
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.3.1"
   },
   "devDependencies": {
     "sass": "^1.26.8"
