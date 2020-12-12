@@ -10,7 +10,8 @@
     "build": "parcel build drag-n-drop/src/*.html"
   },
   "keywords": [
-    "drag, draggable"
+    "drag",
+    "draggable"
   ],
   "author": "SBRSV <12alexman@gmail.com>",
   "license": "ISC",
