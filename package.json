@@ -17,7 +17,6 @@
   "license": "ISC",
   "repository": "https://github.com/SBRSV/dragulla",
   "dependencies": {
-    "gsap": "^3.3.1",
     "img": "^3.0.3",
     "normalize.css": "^8.0.1",
     "parcel": "^1.12.4",
