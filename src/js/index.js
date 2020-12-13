@@ -1,100 +1,98 @@
-import './assets/case'
+import {getMousePosition, getTransformValues, addClass, removeClass} from "./utils/dom"
 
-import gsap from "gsap"
-import getMousePosition from "./utils/dom"
+import './assets/images'
 
-class Dragon {
-    constructor(elements){
-
-        this.elements = typeof elements == 'string' ? document.querySelectorAll(elements) : elements;
+class Draggula {
+    constructor(elements, options) {
+        this.$elements = typeof elements === 'string' ? document.querySelectorAll(elements) : elements
+        this.options = options
 
         this.isDragging = false
-        
-        this.computedPosition = { x: 0, y: 0 };
-        this.startPoint = { x: 0, y: 0 };
-        this.latestPosition = { x: 0, y: 0 };
-        this.dragDistance = { x: 0, y: 0 },
-
-        this.target,
-        this.zIndex = 0,
-
-        this.bindEvents();
-
+        this.zIndex = 0
+        this.dragDistance = { x: 0, y: 0 }
+        this.startPoint = { x: 0, y: 0 }
     }
 
-    getStylePosition( element ){
-        const style = getComputedStyle(element);
-        const x = parseInt(style.getPropertyValue('left'));
-        const y = parseInt(style.getPropertyValue('top'));
-
-        // clean up 'auto' or other non-integer values
-        this.computedPosition.x = isNaN( x ) ? 0 : x;
-        this.computedPosition.y = isNaN( y ) ? 0 : y;
-    }
-
-    onDragStart( event ){
-        if( event.button !== 0) return
-    
-        this.isDragging = true
-    
+    onDragStart(event) {
         event.preventDefault()
-     
-        this.target = event.target;
-    
-        this.getStylePosition(this.target);
-    
-        this.startPoint.x = getMousePosition(event).x;
-        this.startPoint.y = getMousePosition(event).y;
-    
-        this.latestPosition.x = this.computedPosition.x
-        this.latestPosition.y = this.computedPosition.y
-    
-        gsap.set(this.target, {
-            zIndex: 103,
-        })
-    }
-    
-    onDragMove( event ){
-        if ( !this.isDragging ) return
-        
-        this.dragDistance.x = this.startPoint.x - getMousePosition(event).x,
-        this.dragDistance.y = this.startPoint.y - getMousePosition(event).y;
-    
-        this.latestPosition.x = -this.dragDistance.x + this.computedPosition.x;
-        this.latestPosition.y = -this.dragDistance.y + this.computedPosition.y;
-        
-        gsap.set(this.target, {
-           x: -this.dragDistance.x,
-           y: -this.dragDistance.y
-        })
-    
-    }
-    
-    onDragEnd( event ){
-        this.isDragging = false
-        
-        this.zIndex++
 
-        gsap.set(this.target, {
-            zIndex: 1 + this.zIndex,    
-            x: 0,
-            y: 0,
-            left: this.latestPosition.x,
-            top: this.latestPosition.y
-        })
-    
+        // checks if mouse left button was clicked, not mouse wheel or mouse right button
+        if (event.button !== 0) return
+
+        this.isDragging = true
+
+        this.target = event.target
+
+        this.startPoint.x = getMousePosition(event, true).x - getTransformValues(this.target).x
+        this.startPoint.y = getMousePosition(event, true).y - getTransformValues(this.target).y
+
+        addClass(this.target, this.options.activeClass)
+        this.target.style.zIndex = `${1 + ++this.zIndex}`
     }
-    
-    bindEvents(){
-        this.elements.forEach(element => {
-            element.addEventListener('mousedown', this.onDragStart.bind(this))
+
+    onDragMove(event) {
+        if (!this.isDragging) return
+
+        this.dragDistance.x = this.startPoint.x - getMousePosition(event, true).x
+        this.dragDistance.y = this.startPoint.y + (-getMousePosition(event, true).y)
+
+        this.transformUpdate(-this.dragDistance.x, -this.dragDistance.y)
+    }
+
+    onDragEnd() {
+        if (this.isDragging) {
+            const
+                elementLastPositionX = -this.dragDistance.x,
+                elementLastPositionY = -this.dragDistance.y
+
+            this.isDragging = false
+
+            removeClass(this.target, this.options.activeClass)
+            this.target.style.zIndex = `${1 + this.zIndex}`
+            this.transformUpdate(elementLastPositionX, elementLastPositionY)
+        }
+    }
+
+    transformUpdate(xValue, yValue) {
+        this.target.style.transform = `translate(${xValue}px, ${yValue}px)`
+    }
+
+    init() {
+        this.onDragStartHandler = this.onDragStart.bind(this)
+        this.onDragMoveHandler = this.onDragMove.bind(this)
+        this.onDragEndHandler = this.onDragEnd.bind(this)
+
+        this.$elements.forEach(element => {
+            element.addEventListener('mousedown', this.onDragStartHandler)
         })
-        document.addEventListener('mousemove', this.onDragMove.bind(this))
-        document.addEventListener('mouseup', this.onDragEnd.bind(this))
-    }   
-    
+        document.addEventListener('mousemove', this.onDragMoveHandler)
+        document.addEventListener('mouseup', this.onDragEndHandler)
+    }
+
+    destroy() {
+        this.$elements.forEach(element => {
+            if (this.options.clearTransformStyleOnDestroy) {
+                element.style.transform = ''
+            }
+
+            element.removeEventListener('mousedown', this.onDragStartHandler)
+        })
+        document.removeEventListener('mousemove', this.onDragMoveHandler)
+        document.removeEventListener('mouseup', this.onDragEndHandler)
+    }
 }
 
-let elements = document.querySelectorAll('.item');
+const drag = new Draggula(document.querySelectorAll('.js-draggable'), {
+    activeClass: 'active',
+    clearTransformStyleOnDestroy: false
+})
 
-let drag = new Dragon(elements);
+drag.init()
+
+document.getElementById('destroy').addEventListener('click', ()=> {
+    drag.destroy()
+})
+
+document.getElementById('init').addEventListener('click', ()=> {
+    drag.init()
+})
