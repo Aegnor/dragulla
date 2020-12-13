@@ -1,20 +1,21 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
     background: #f6f7f8;
     overflow-x: hidden;
 }
 
-img{
+img {
     width: 100%;
     height: auto;
     display: block;
 }
 
-.container{
+.container {
     position: relative;
     display: flex;
     margin-top: 140px;
@@ -22,8 +23,13 @@ img{
     flex-direction: column
 }
 
-.item{
+.item {
     position: relative;
-    width: 33%;
+    width: 50%;
     object-fit: cover;
+    cursor: grab;
+
+    &.active {
+        cursor: grabbing;
+    }
 }
