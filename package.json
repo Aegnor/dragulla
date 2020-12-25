@@ -1,28 +1,31 @@
 {
-  "name": "drag'n'drop",
-  "version": "1.0.0",
-  "description": "Super simple draggable gesture",
-  "private": true,
-  "scripts": {
-    "start": "parcel ./src/*.html",
-    "watch": "parcel watch ./src/*.html",
-    "open": "parcel serve ./src/*.html",
-    "build": "parcel build ./src/*.html"
-  },
-  "keywords": [
-    "drag",
-    "draggable"
-  ],
-  "author": "SBRSV <12alexman@gmail.com>",
-  "license": "ISC",
-  "repository": "https://github.com/SBRSV/dragulla",
-  "dependencies": {
-    "img": "^3.0.3",
-    "normalize.css": "^8.0.1",
-    "parcel": "^1.12.4",
-    "parcel-bundler": "^1.12.4"
-  },
-  "devDependencies": {
-    "sass": "^1.26.8"
-  }
+    "name": "drag'n'drop",
+    "version": "1.0.0",
+    "description": "Super simple draggable gesture",
+    "private": true,
+    "author": "SBRSV <12alexman@gmail.com>",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SBRSV/dragulla"
+    },
+    "scripts": {
+        "start": "parcel ./src/*.html",
+        "watch": "parcel watch ./src/*.html",
+        "open": "parcel serve ./src/*.html",
+        "build": "parcel build ./src/*.html"
+    },
+    "keywords": [
+        "drag",
+        "draggable"
+    ],
+    "dependencies": {
+        "img": "^3.0.3",
+        "normalize.css": "^8.0.1",
+        "parcel": "^1.12.4",
+        "parcel-bundler": "^1.12.4"
+    },
+    "devDependencies": {
+        "sass": "^1.26.8"
+    }
 }
